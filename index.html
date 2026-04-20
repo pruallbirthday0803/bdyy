@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday MY MARD 🥳</title>
+
+<style>
+body{
+  margin:0;
+  font-family:Arial;
+  color:white;
+  overflow-x:hidden;
+  background: linear-gradient(
+  135deg,
+  #0f172a 0%,
+  #1e293b 50%,
+  #0f172a 100%
+);
+background-attachment: fixed;
+}
+
+
+.page{display:none;text-align:center;padding:40px 20px;}
+.active{display:block;}
+
+.card{
+  position: relative;
+  z-index: 10;
+  background: rgba(30, 41, 59, 0.88);
+  padding: 30px;
+  border-radius: 20px;
+  max-width: 900px;
+  margin: auto;
+  backdrop-filter: blur(15px);
+  box-shadow: 0 0 40px rgba(255, 0, 120, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.card p{
+  font-size: clamp(14px, 4vw, 17px);
+  line-height: 1.8;
+  color: #e2e8f0;
+  letter-spacing: 0.3px;
+  max-width: 750px;
+  margin: 0 auto 14px auto;
+  text-align: left;
+  font-weight: 300;
+}
+
+button{
+  padding:12px 25px;
+  margin:10px;
+  border:none;
+  border-radius:25px;
+  font-weight:bold;
+  cursor:pointer;
+  background: linear-gradient(45deg, #ff2e73, #ff4e8d);
+  color:white;
+  box-shadow: 0 0 15px rgba(255, 46, 115, 0.5);
+  transition:0.3s;
+}
+
+button:hover{
+  transform:scale(1.08);
+  box-shadow: 0 0 25px rgba(255, 46, 115, 0.8);
+}
+button:hover{transform:scale(1.1);}
+
+/* GAME */
+#board{
+  display:grid;
+  grid-template-columns:repeat(3,90px);
+  gap:12px;
+  justify-content:center;
+  margin:25px 0;
+}
+.cell{
+  width:90px;height:90px;
+  background:white;
+  border-radius:20px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:38px;font-weight:bold;color:#ff2e73;
+  cursor:pointer;
+}
+
+/* COUNTDOWN */
+#countdown{
+  position:fixed;inset:0;background:black;
+  display:none;justify-content:center;align-items:center;
+  z-index:9999;flex-direction:column;
+}
+#countText{font-size:20vw;font-weight:bold;text-shadow:0 0 60px pink;}
+.bigBirthday{
+  font-size:8vw;
+  text-align:center;
+  text-shadow:0 0 30px pink;
+  padding:20px;
+}
+
+/* CONFETTI */
+.confetti{
+  position:fixed;width:10px;height:10px;
+  top:-10px;pointer-events:none;
+  animation:fall 3s linear forwards;z-index:0;
+}
+@keyframes fall{
+  to{transform:translateY(110vh) rotate(720deg);opacity:0;}
+}
+
+/* FLOATING TEXT */
+.floating{
+
+  position:fixed;
+  bottom:-30px;
+  opacity:0.08;
+  pointer-events:none;
+  animation: floatUp 8s linear forwards;
+  font-weight:bold;
+  z-index:-1;
+}
+@keyframes floatUp{
+  0%{transform:translateY(0);}
+  100%{transform:translateY(-110vh);}
+}
+
+/* SURPRISE GRID */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  gap:20px;
+  margin-top:30px;
+}
+.box{
+  background:white;
+  color:#ff2e73;
+  border-radius:20px;
+  padding:20px;
+  cursor:pointer;
+  transition:0.3s;
+}
+.box:hover{transform:scale(1.05);}
+
+/* COLLAGE STYLE */
+.collage{
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap:20px;
+  margin-top:25px;
+}
+
+.collage img{
+  width:100%;
+  height:180px;
+  object-fit:cover;
+  border-radius:15px;
+  transition:0.4s;
+  box-shadow:0 8px 20px rgba(255,0,120,0.3);
+}
+
+.collage img:hover{
+  transform:scale(1.05);
+}
+
+</style>
+</head>
+<body>
+    <audio id="birthdaySong" preload="auto">
+  <source src="birthday.mp4" type="audio/mpeg">
+</audio>
+
+<!-- PASSWORD -->
+<div id="page1" class="page active">
+<div class="card">
+<h2>Enter Password 🎂</h2>
+<input type="password" id="pass"><br><br>
+<button onclick="checkPass()">Enter</button>
+</div></div>
+
+<!-- WANT -->
+<div id="page2" class="page">
+<div class="card">
+<h2>Want to see surprise?</h2>
+<button onclick="show(3)">Yes</button>
+<button onclick="show(4)">No</button>
+</div></div>
+
+<!-- TEASE -->
+<div id="page3" class="page">
+<div class="card">
+<p>Shakal dekhi h jo surprise chaiye??... phle muh dhoke aa fr milega surprise 😂</p>
+<button onclick="show(5)">Next</button>
+</div></div>
+
+<div id="page4" class="page">
+<div class="card">
+<p>Tera bdy hoga pr chlegi meri he surprise toh dekhna pdega 😎</p>
+<button onclick="show(3)">Lets see surprise</button>
+</div></div>
+
+<!-- MUH DHOKE -->
+<div id="page5" class="page">
+<div class="card">
+<p>Beshram h bina muh dhoye aagya surprise dekhne 😑😑
+Koi ni dekhle tu bhi kya yaad rkhega 🫶🏻🫶🏻</p>
+<button onclick="show(9);startGame()">Next</button>
+</div></div>
+
+<!-- GAME -->
+<div id="page9" class="page">
+<div class="card">
+<h2>Win to unlock surprises 💖</h2>
+<div id="board"></div>
+<p id="winMsg"></p>
+<button id="seeBtn" style="display:none" onclick="startCountdown()">See Surprise</button>
+</div></div>
+
+<!-- SURPRISE SELECTION -->
+<div id="page10" class="page">
+<div class="card">
+<h2>Select Surprise 🎁</h2>
+
+<div class="grid">
+<div class="box" onclick="show(11);burst()">
+<h3>🎀</h3>
+<h3>Surprise 1</h3>
+</div>
+
+<div class="box" onclick="show(12);burst()">
+<h3>🎂</h3>
+<h3>Surprise 2</h3>
+</div>
+
+<!-- YE AB 3rd POSITION -->
+<div class="box" onclick="show(14);burst()">
+<h3>✨</h3>
+<h3>Surprise 3</h3>
+</div>
+
+<!-- YE AB 4th POSITION -->
+<div class="box" onclick="show(13);burst()">
+<h3>🎉</h3>
+<h3>Surprise 4</h3>
+</div>
+</div>
+
+<br>
+<button onclick="show(7)">Next</button>
+</div></div>
+
+<!-- SURPRISE 1 -->
+<div id="page11" class="page">
+<div class="card">
+<h2>Happy Birthday LOVEEEEE 🥳</h2>
+<div style="font-size:15vw;margin:30px 0;">🌸🌹</div>
+<h2>For youu 🥳</h2>
+<button onclick="show(10)">Back</button>
+</div></div>
+
+<!-- SURPRISE 2 -->
+<div id="page12" class="page">
+<div class="card">
+<h2>Happy Birthday LOVEEEEEE 🥳</h2>
+<div style="font-size:15vw;margin:30px 0;">🎂</div>
+<h2>Take your cakeee 🫶🏻</h2>
+<button onclick="show(10)">Back</button>
+</div></div>
+
+<!-- SURPRISE 4 (LONG MESSAGE) -->
+<div id="page13" class="page">
+<div class="card">
+<h2>Happy Birthday MY LOVE 🥳</h2>
+
+<pre class="bigText">
+Happy Birthday my love... Hope u don't mind  mene birthday se ek din phele thoda sa gussa dilaya but tumhare kam tapad khane vale h 
+I hope tumhara ye birthday abtk ka best birthday ho  ❤️ hm sath to nhi bna paegi but my best wishes are always for you 💋 kam tumhara baduya vale h but I can adjust itne time jhela h or bhi thik bs yrr ek advice h thoda sa gussa km kra kro aj bhi tumhare hr choti daat pr rona ata h and u know I am always there for you emotional and physically mujhe bs tum chaiyo tumhare khushi tumhari hassi tum best ho I hope tumhe duniya ki sari khushi mile or me bhi 😁
+Tumhe life me success mile or tumhe tumhari scorpio N bhi mile 
+ "HAPPY BIRTHDAY FOR MY PASANDIDA MARD"
+ME KOSIS KARUNGI MERI SIDE SE AP HMESHA KHUSH RHO BS KBHI KBHI THODA SA GUSSA CHLEGA JARURI "
+I hope mere  ye chote se efforts apko  pasand aye pheli br kr rhe hu kuch dar lg rha h pasand kroge ya nhi 
+Or apka gift apko jaldi milega 
+HAPPY BIRTHDAY 💋💋💋💋💋💋💋💋💋💋❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️🫂🫂🫂🫂🫂🫂🫂🫂🫂🫂💝💝💝💝💝💝💝💝💝💝💝💝
+</pre>
+
+<button onclick="show(10)">Back</button>
+<button onclick="show(7)">Next</button>
+</div>
+</div>   <!-- ✅ YE DIV MISSING THA -->
+
+<!-- SURPRISE 3 (PHOTO COLLAGE) -->
+<div id="page14" class="page">
+  <div class="card">
+    <h2>Our Memories 📸💖</h2>
+
+    <div class="collage">
+      <img src="photo1.JPG">
+      <img src="photo2.JPG">
+      <img src="photo3.JPG">
+      <img src="photo4.JPG">
+      <img src="photo5.JPG">
+      <img src="photo6.JPG">
+    </div>
+
+    <br>
+    <button onclick="show(10)">Back</button>
+  </div>
+</div>
+
+    <br>
+    <button onclick="show(10)">Back</button>
+  </div>
+</div>
+</div>
+
+<!-- DO YOU LIKE ME -->
+<div id="page7" class="page">
+<div class="card">
+<h2>Do you like the surprise or me? 🤭</h2>
+<button id="surpriseBtn" onclick="dodge()">Surprise</button>
+<button onclick="show(8)">You ❤️</button>
+</div></div>
+
+<!-- TEDDY -->
+<div id="page8" class="page">
+<div class="card">
+<h2>Ohh you like meeeee?? 🥹💖</h2>
+<div id="teddy" style="font-size:120px;">🧸💖</div>
+</div></div>
+
+<!-- COUNTDOWN -->
+<div id="countdown">
+<h1 id="countText">3</h1>
+
+</div>
+
+<script>
+function show(n){
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+document.getElementById("page"+n).classList.add("active");
+}
+
+function checkPass(){
+if(document.getElementById("pass").value.toLowerCase()=="03072003"){
+show(2);
+
+let song = document.getElementById("birthdaySong");
+song.play().catch(()=>{});
+
+}else alert("Wrong password 😒");
+}
+
+let board=["","","","","","","","",""];
+let gameActive=true;
+const winPatterns=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+
+function startGame(){
+board=["","","","","","","","",""];
+gameActive=true;
+document.getElementById("board").innerHTML="";
+document.getElementById("winMsg").innerText="";
+document.getElementById("seeBtn").style.display="none";
+board.forEach((_,i)=>{
+let c=document.createElement("div");
+c.className="cell";
+c.onclick=()=>move(i);
+document.getElementById("board").appendChild(c);
+});
+}
+
+function move(i){
+if(board[i]!=""||!gameActive)return;
+board[i]="X";render();
+if(checkWin("X")){
+gameActive=false;
+document.getElementById("winMsg").innerText="YOU WIN NOW YOU CAN SEE SURPRISE 🥳";
+document.getElementById("seeBtn").style.display="inline-block";
+return;
+}
+computer();
+}
+
+function computer(){
+let empty=board.map((v,i)=>v==""?i:null).filter(v=>v!=null);
+if(empty.length==0)return;
+board[empty[Math.floor(Math.random()*empty.length)]]="O";
+render();
+}
+
+function checkWin(p){
+return winPatterns.some(a=>a.every(i=>board[i]==p));
+}
+
+function render(){
+document.querySelectorAll(".cell").forEach((c,i)=>c.innerText=board[i]);
+}
+
+function startCountdown(){
+let count=3;
+let cd=document.getElementById("countdown");
+let txt=document.getElementById("countText");
+cd.style.display="flex";
+txt.innerText="3";
+let interval=setInterval(()=>{
+count--;
+if(count>0)txt.innerText=count;
+else{
+clearInterval(interval);
+txt.innerHTML='<div class="bigBirthday">HAPPY BIRTHDAY MY LOVE 🥳🩷</div>';
+setTimeout(()=>{
+cd.style.display="none";
+show(10);
+startFloating();
+},2000);
+}
+},1000);
+}
+
+function burst(){
+for(let i=0;i<200;i++){
+let conf=document.createElement("div");
+conf.className="confetti";
+conf.style.left=Math.random()*100+"vw";
+conf.style.backgroundColor = `hsl(${Math.random()*360},100%,50%)`;
+document.body.appendChild(conf);
+setTimeout(()=>conf.remove(),3000);
+}
+}
+
+let floatingStarted=false;
+function startFloating(){
+if(floatingStarted) return;
+floatingStarted=true;
+setInterval(()=>{
+const el=document.createElement("div");
+el.className="floating";
+el.innerHTML="HAPPY BIRTHDAY MY LOVEE 🥳🩷";
+el.style.left=Math.random()*100+"vw";
+el.style.fontSize=(Math.random()*15+20)+"px";
+document.body.appendChild(el);
+setTimeout(()=>el.remove(),8000);
+},1200);
+}
+
+function dodge(){
+let btn=document.getElementById("surpriseBtn");
+btn.style.position="absolute";
+btn.style.top=Math.random()*200+"px";
+btn.style.left=Math.random()*200+"px";
+}
+</script>
+</body>
+</html>
